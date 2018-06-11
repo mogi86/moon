@@ -1,0 +1,28 @@
+version: "2"
+services:
+  moon_web:
+    build: ./docker
+    container_name: moon_web
+    ports:
+      - "8080:80"
+    depends_on:
+      - moon_db
+    links:
+      - moon_db
+    volumes:
+      - ./moon:/var/www/moon
+    tty: true
+
+  moon_db:
+    image: mysql:5.6.37
+    container_name: moon_db
+    environment:
+      MYSQL_ROOT_PASSWORD:
+      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+      MYSQL_DATABASE: moon
+      MYSQL_HOST: "localhost"
+    ports:
+      - 3306:3306
+    expose:
+      - 3306
+    tty: true

@@ -1,0 +1,57 @@
+- name: check /usr/local/pyenv exist
+  stat: path=/usr/local/pyenv
+  register: is_exist_pyenv
+  tags: python
+
+- name: install pyenv
+  command: git clone https://github.com/yyuu/pyenv.git /usr/local/pyenv
+  when: not is_exist_pyenv.stat.exists
+  tags: python
+
+- name: make versions directory
+  file: path=/usr/local/pyenv/versions state=directory
+  tags: python
+
+- name: make shims directory
+  file: path=/usr/local/pyenv/shims state=directory
+  tags: python
+
+- name: check virtualenv exist
+  stat: path=/usr/local/pyenv/plugins/pyenv-virtualenv
+  register: is_exist_virtualenv
+  tags: python
+
+- name: install pyenv
+  command: git clone git://github.com/yyuu/pyenv-virtualenv.git /usr/local/pyenv/plugins/pyenv-virtualenv
+  when: not is_exist_virtualenv.stat.exists
+  tags: python
+
+- name: add PYENV_ROOT
+  lineinfile: >
+    dest="/etc/profile"
+    line='export PYENV_ROOT="/usr/local/pyenv"'
+  tags: python
+
+- name: add PATH
+  lineinfile: >
+    dest="/etc/profile"
+    line='export PATH="${PYENV_ROOT}/shims:${PYENV_ROOT}/bin:${PATH}"'
+  tags: python
+
+- name: source /etc/profile
+  shell: /bin/bash -lc "source /etc/profile"
+  tags: python
+
+- name: check installed python
+  stat: path=/usr/local/pyenv/versions/3.6.5
+  register: is_installed_python
+  tags: python
+
+- name: install python
+  shell: /bin/bash -lc "pyenv install -v 3.6.5"
+  when: not is_installed_python.stat.exists
+  tags: python
+
+- name: set python version
+  shell: /bin/bash -lc "pyenv global 3.6.5"
+  tags: python
