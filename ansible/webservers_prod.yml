@@ -1,0 +1,6 @@
+---
+- hosts: webservers_prod
+  become: true
+  roles:
+    - common
+    - python

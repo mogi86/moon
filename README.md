@@ -11,13 +11,21 @@ $ docker-compose up -d
 
 ## Provisioning
 
-- {environment}には対象環境名(localなど)を入れる
-
 ### exce rovisioning
+
+- ローカル
 
 ```
 $ cd /path/to/moon/
-$ ansible-playbook -i ansible/inventories/{environment} site.yml
+$ ansible-playbook -i ansible/inventories/local site.yml
+```
+
+- AWS
+prod環境のため、git上のホスト名はマスキングしている。
+
+```
+$ cd /path/to/moon/
+$ ansible-playbook -i ansible/inventories/prod prod.yml
 ```
 
 ### docker exec web container
