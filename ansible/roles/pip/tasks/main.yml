@@ -1,0 +1,5 @@
+- name: pip install
+  shell: /bin/bash -lc "pip install {{ item }}"
+  with_items:
+    - beautifulsoup4
+  tags: pip
